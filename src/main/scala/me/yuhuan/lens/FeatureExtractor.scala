@@ -1,7 +1,5 @@
 package me.yuhuan.lens
 
-import me.yuhuan.lens.Featurizer
-
 /**
   * @author Yuhuan Jiang (jyuhuan@gmail.com).
   */
