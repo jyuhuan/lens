@@ -1,9 +1,10 @@
-package me.yuhuan.feature
+package me.yuhuan.lens
 
 /**
   * @author Yuhuan Jiang (jyuhuan@gmail.com).
   */
-trait Feature[+X] {
+
+private[lens] trait Feature[+X] {
   def name: String
   def value: X
   def amount: Double
@@ -36,5 +37,14 @@ object Feature {
   }
 }
 
-//case class CategoricalFeature[+X](name: String, value: CategoricalValue[X], amount: Double = 1.0) extends Feature[X]
-//case class NumericalFeature[+X](name: String, value: NumericalValue[X]) extends Feature[X]
+trait FeatureVector {
+  def features: Iterable[Feature[Any]]
+
+  override def toString = features.mkString(" | ")
+}
+
+object FeatureVector {
+  def apply(fs: Feature[Any]*) = new FeatureVector {
+    def features: Iterable[Feature[Any]] = fs
+  }
+}
