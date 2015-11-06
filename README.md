@@ -18,7 +18,7 @@ object Words extends Featurizer[Sentence, String] {
   }
 }
 
-val f = Words + Words.map(_.length)
+val f = Words + Words.map("WordLengths")(_.length)
 
 // Training sentences
 val sentence1 = "John loves Mary".split(' ')
