@@ -23,10 +23,10 @@ object Feature {
 
   def unapply[X](f: Feature[X]): Option[(String, X, Double)] = Some(f.name, f.value, f.amount)
 
-  def Cat[X](_name: String, _value: X, _amount: Double = 1.0) = new Feature[X] {
+  def Cat[X](_name: String, _value: X) = new Feature[X] {
     def name = _name
     def value = _value
-    def amount = _amount
+    def amount = 1.0
   }
 
   def Num(_name: String, _amount: Double) = new Feature[Unit] {
