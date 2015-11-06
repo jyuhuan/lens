@@ -1,4 +1,4 @@
-package me.yuhuan.feature
+package me.yuhuan.lens
 
 import scala.StringBuilder
 import scala.collection.mutable
