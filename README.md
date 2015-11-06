@@ -2,6 +2,13 @@
 
 A feature extraction tool.
 
+Add to your project by:
+
+```scala
+resolvers += Resolver.sonatypeRepo("snapshots")
+libraryDependencies += "me.yuhuan" %% "lense" % "0.0.0-SNAPSHOT"
+```
+
 ## Example: Extracting Features
 
 ```scala
