@@ -57,8 +57,38 @@ trait Featurizer[-X, +Y] extends (X ⇒ FeatureGroup[Y]) { outer ⇒
 }
 
 object Featurizer {
-  def apply[X, Y](_name: String)(_f: X ⇒ FeatureGroup[Y]) = new Featurizer[X, Y] {
+  def apply[X, Y](_name: String)(f: X ⇒ FeatureGroup[Y]) = new Featurizer[X, Y] {
     def name: String = _name
-    def featurize(x: X): FeatureGroup[Y] = _f(x)
+    def featurize(x: X): FeatureGroup[Y] = f(x)
+  }
+}
+
+trait CatFeaturizer[-X, +Y] extends Featurizer[X, Y] { outer ⇒
+  def valueOf(x: X): Y
+  def featurize(x: X): FeatureGroup[Y] = new FeatureGroup[Y] {
+    def name: String = outer.name
+    def values: Iterable[(Y, Double)] = Seq(valueOf(x) → 1.0)
+  }
+}
+
+object CatFeaturizer {
+  def apply[X, Y](_name: String)(f: X ⇒ Y) = new CatFeaturizer[X, Y] {
+    def name: String = _name
+    def valueOf(x: X): Y = f(x)
+  }
+}
+
+trait NumFeaturizer[-X] extends Featurizer[X, Unit] { outer ⇒
+  def amountOf(x: X): Double
+  def featurize(x: X): FeatureGroup[Unit] = new FeatureGroup[Unit] {
+    def name: String = outer.name
+    def values: Iterable[(Unit, Double)] = Seq(() → amountOf(x))
+  }
+}
+
+object NumFeaturizer {
+  def apply[X](_name: String)(f: X ⇒ Double) = new NumFeaturizer[X] {
+    def name: String = _name
+    def amountOf(x: X): Double = f(x)
   }
 }
