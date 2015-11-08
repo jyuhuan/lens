@@ -25,11 +25,6 @@ trait FeatureGroup[+X] { outer ⇒
     def values = outer.values.map { case (v, _) ⇒ ((), f(v)) }
   }
 
-//  def ++[Y >: X](that: FeatureGroup[Y]): FeatureGroup[Y] = new FeatureGroup[Y] { inner ⇒
-//    def name = s"${outer.name}$$${that.name}"
-//    def values: Iterable[(Y, Double)] = outer.values ++ that.values
-//  }
-
   override def toString = values.map{ case (v, a) ⇒ s"$name=$v:$a" }.mkString("; ")
 }
 
@@ -38,4 +33,7 @@ object FeatureGroup {
     def name = _name
     def values: Iterable[(X, Double)] = fs
   }
+
+  def ofCats[X](name: String)(cs: X*) = FeatureGroup(name)(cs.map(x ⇒ x → 1.0))
+  def ofNums(name: String)(ds: Double*) = FeatureGroup(name)(ds.map(d ⇒ () → d))
 }
