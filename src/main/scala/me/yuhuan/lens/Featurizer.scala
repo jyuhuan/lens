@@ -17,11 +17,13 @@ trait Featurizer[-X, +Y] extends (X ⇒ FeatureGroup[Y]) { outer ⇒
   }
 
   def andThen[Z](f: Featurizer[Y, Z]): Featurizer[X, Z] = new Featurizer[X, Z] {
+    println("Single andThen")
     def name = outer.name + f.name
     def featurize(x: X): FeatureGroup[Z] = outer.featurize(x).flatMap(f)
   }
 
   def andThen(fs: Featurizer[Y, Any]*): FeatureExtractor[X] = new FeatureExtractor[X] {
+    println("Multi andThen")
     def featurizers: Iterable[Featurizer[X, Any]] = ???
 
     val cache = mutable.HashMap[X, FeatureGroup[Y]]()
@@ -67,7 +69,7 @@ trait CatFeaturizer[-X, +Y] extends Featurizer[X, Y] { outer ⇒
   def valueOf(x: X): Y
   def featurize(x: X): FeatureGroup[Y] = new FeatureGroup[Y] {
     def name: String = outer.name
-    def values: Iterable[(Y, Double)] = Seq(valueOf(x) → 1.0)
+    val values: Iterable[(Y, Double)] = Seq(valueOf(x) → 1.0)
   }
 }
 
