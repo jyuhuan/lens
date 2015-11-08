@@ -54,5 +54,5 @@ class Alphabet(var isFrozen: Boolean, w2i: mutable.HashMap[String, Int], i2w: mu
 }
 
 object Alphabet {
-  def emtpy: Alphabet = new Alphabet(isFrozen = false, new mutable.HashMap[String, Int](), new mutable.HashMap[Int, String]())
+  def empty: Alphabet = new Alphabet(isFrozen = false, new mutable.HashMap[String, Int](), new mutable.HashMap[Int, String]())
 }
