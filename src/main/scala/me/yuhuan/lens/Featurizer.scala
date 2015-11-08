@@ -55,3 +55,10 @@ trait Featurizer[-X, +Y] extends (X ⇒ FeatureGroup[Y]) { outer ⇒
 //    def featurize(x: X1): FeatureGroup[Y1] = outer.featurize(x) ++ that.featurize(x)
 //  }
 }
+
+object Featurizer {
+  def apply[X, Y](_name: String)(_f: X ⇒ FeatureGroup[Y]) = new Featurizer[X, Y] {
+    def name: String = _name
+    def featurize(x: X): FeatureGroup[Y] = _f(x)
+  }
+}
