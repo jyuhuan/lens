@@ -3,7 +3,7 @@ package me.yuhuan.lens
 /**
   * @author Yuhuan Jiang (jyuhuan@gmail.com).
   */
-trait FeatureExtractor[X] {
+trait FeatureExtractor[-X] {
   def featurizers: Iterable[Featurizer[X, Any]]
 
   def apply(x: X): FeatureVector = {
