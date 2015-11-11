@@ -37,8 +37,12 @@ object Feature {
   }
 }
 
-trait FeatureVector {
+trait FeatureVector { outer ⇒
   def features: Iterable[Feature[Any]]
+
+  def ++(that: FeatureVector) = new FeatureVector {
+    def features: Iterable[Feature[Any]] = outer.features ++ that.features
+  }
 
   override def toString = features.mkString(" | ")
 }
