@@ -16,16 +16,16 @@ trait Featurizer[-X, +Y] extends (X ⇒ FeatureGroup[Y]) { outer ⇒
     def featurize(x: X): FeatureGroup[Z] = outer.featurize(x).map(newName)(f)
   }
 
+  def >>>[Z](f: Featurizer[Y, Z]) = andThen(f)
+
   def andThen[Z](f: Featurizer[Y, Z]): Featurizer[X, Z] = new Featurizer[X, Z] {
-    println("Single andThen")
     def name = outer.name + f.name
     def featurize(x: X): FeatureGroup[Z] = outer.featurize(x).flatMap(f)
   }
 
-  def andThen(fs: Featurizer[Y, Any]*): FeatureExtractor[X] = new FeatureExtractor[X] {
-    println("Multi andThen")
-    def featurizers: Iterable[Featurizer[X, Any]] = ???
+  def >>>[Z](fs: Featurizer[Y, Any]*) = andThen(fs: _*)
 
+  def andThen(fs: Featurizer[Y, Any]*): SimpleFeatureExtractor[X] = new SimpleFeatureExtractor[X] {
     val cache = mutable.HashMap[X, FeatureGroup[Y]]()
 
     override def apply(x: X): FeatureVector = {
@@ -33,14 +33,14 @@ trait Featurizer[-X, +Y] extends (X ⇒ FeatureGroup[Y]) { outer ⇒
 
       val groups: Iterable[FeatureGroup[Any]] = for (f ← fs) yield new FeatureGroup[Any] {
         def name: String = s"${outer.name}$$${f.name}"
-        def values: Iterable[(Any, Double)] = for {
+        val values: Iterable[(Any, Double)] = for {
           (yv, ya) ← ys.values
           (zv, za) ← f.featurize(yv).values
         } yield (zv, ya * za)
       }
 
       new FeatureVector {
-        def features: Iterable[Feature[Any]] = groups.flatMap(g ⇒ g.values.map {
+        val features: Iterable[Feature[Any]] = groups.flatMap(g ⇒ g.values.map {
           case (v, a) ⇒ Feature(g.name, v, a)
         })
       }
