@@ -6,7 +6,7 @@ package me.yuhuan.lens
 trait Featurizer[-X, Y] { outer =>
   def apply(x: X): Iterable[Feature[Y]]
 
-  def ~~>[Z](fs: Featurizer[Y, Z]*): Featurizer[X, Z] = new Featurizer[X, Z] {
+  def >>>[Z](fs: Featurizer[Y, Z]*): Featurizer[X, Z] = new Featurizer[X, Z] {
     def apply(x: X): Iterable[Feature[Z]] = {
       val outerResult = outer(x)
       for {
@@ -17,8 +17,18 @@ trait Featurizer[-X, Y] { outer =>
     }
   }
 
-  def ++[X1 <: X](f: Featurizer[X1, Y]): Featurizer[X1, Y] = new Featurizer[X1, Y] {
+  def +[X1 <: X](f: Featurizer[X1, Y]): Featurizer[X1, Y] = new Featurizer[X1, Y] {
     def apply(x: X1): Iterable[Feature[Y]] = f(x) ++ outer(x)
+  }
+
+  def *[X1 <: X, Z](f: Featurizer[X1, Z]): Featurizer[X1, (Y, Z)] = new Featurizer[X1, (Y, Z)] {
+    def apply(x: X1): Iterable[Feature[(Y, Z)]] = {
+      val outerResult = outer(x)
+      for {
+        f1 <- outerResult
+        f2 <- f(x)
+      } yield Feature(s"${f1.name}$$${f2.name}", (f1.value, f2.value), f1.amount * f2.amount)
+    }
   }
 }
 
