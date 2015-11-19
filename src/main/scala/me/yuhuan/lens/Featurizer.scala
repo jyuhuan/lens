@@ -27,7 +27,7 @@ trait Featurizer[-X, Y] { outer =>
       for {
         f1 <- outerResult
         f2 <- f(x)
-      } yield Feature(s"${f1.name}$$${f2.name}", (f1.value, f2.value), f1.amount * f2.amount)
+      } yield Feature(s"(${f1.name}$$${f2.name})", (f1.value, f2.value), f1.amount * f2.amount)
     }
   }
 }
