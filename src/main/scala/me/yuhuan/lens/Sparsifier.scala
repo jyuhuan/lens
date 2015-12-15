@@ -1,4 +1,5 @@
 package me.yuhuan.lens
+import me.yuhuan.math.linalg.vector.SparseVector
 
 /**
  * Created by Yuhuan Jiang (jyuhuan@gmail.com) on 11/19/15.

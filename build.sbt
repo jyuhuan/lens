@@ -1,6 +1,6 @@
 name := "lens"
 
-version := "0.2.1-SNAPSHOT"
+version := "0.2.2-SNAPSHOT"
 
 organization := "me.yuhuan"
 
@@ -23,6 +23,8 @@ publishTo := {
 publishArtifact in Test := false
 
 //region Custom Dependencies
+resolvers += Resolver.sonatypeRepo("snapshots")
+libraryDependencies += "me.yuhuan" %% "ymath" % "0.0.1-SNAPSHOT"
 //endregion
 
 
